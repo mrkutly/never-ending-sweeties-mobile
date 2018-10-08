@@ -1,11 +1,33 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import Adapter from './Adapter.js'
+import { StyleSheet, Text, View, Image } from 'react-native';
+
 
 export default class App extends React.Component {
+
+  state = {
+    dogPics: []
+  }
+
+  componentDidMount() {
+    this.appendPic()
+  }
+
+  appendPic = () => {
+    Adapter.get().then(uri => {
+      this.setState(prevState => {
+        return {
+          dogPics: [...prevState.dogPics, <Image key={uri} source={{ uri }} style={{width: 300, height: 300}} />]
+        }
+      })
+    })
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
+        <Text>Hello</Text>
+        {this.state.dogPics}
       </View>
     );
   }
