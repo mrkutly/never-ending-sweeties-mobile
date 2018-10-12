@@ -1,6 +1,6 @@
 import React from 'react';
 import Adapter from './Adapter.js'
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, ScrollView, Image } from 'react-native';
 
 
 export default class App extends React.Component {
@@ -17,18 +17,24 @@ export default class App extends React.Component {
     Adapter.get().then(uri => {
       this.setState(prevState => {
         return {
-          dogPics: [...prevState.dogPics, <Image key={uri} source={{ uri }} style={{width: 300, height: 300}} />]
+          dogPics: [...prevState.dogPics, uri]
         }
       })
     })
   }
 
+  mappedPics = () => {
+    return this.state.dogPics.map(uri => {
+      return <Image key={uri} source={{ uri }} style={{width: 300, height: 300}} />
+    })
+  }
+
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container} onScroll={this.handleScroll} scrollEventThrottle={500}>
         <Text>Hello</Text>
-        {this.state.dogPics}
-      </View>
+        {this.mappedPics()}
+      </ScrollView>
     );
   }
 }
